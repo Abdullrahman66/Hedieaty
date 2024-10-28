@@ -129,15 +129,28 @@ class _CreateEventPageState extends State<CreateEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[850],
       appBar: AppBar(
-        title: Text('Manage Events'),
+        backgroundColor: Colors.black,
+        title: Text(
+          'Manage Events',
+          style: TextStyle(color: Colors.amber,fontSize: 28.0,),
+        ),
         actions: [
           DropdownButton<String>(
             value: _sortCriteria,
+            dropdownColor: Colors.grey[850],
+            icon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.white, // Dropdown icon color
+            ),
             items: ['Name', 'Category', 'Status']
                 .map((criteria) => DropdownMenuItem(
               value: criteria,
-              child: Text('Sort by $criteria'),
+              child: Text(
+                'Sort by $criteria',
+                style: TextStyle(color: Colors.white,fontSize: 16.0),
+              ),
             ))
                 .toList(),
             onChanged: (value) {

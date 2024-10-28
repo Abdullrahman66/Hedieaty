@@ -48,6 +48,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         items: const [
@@ -69,10 +70,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue, // Highlight selected item
-        unselectedItemColor: Colors.grey[900],
-        backgroundColor: Colors.white,
+        selectedItemColor: Colors.amber, // Highlight selected item
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.black,
         showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped, // Handle tab selection
         unselectedLabelStyle: TextStyle(
           fontSize: 12.0,

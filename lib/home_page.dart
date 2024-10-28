@@ -7,10 +7,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Friend> friends = [
-    Friend(name: 'Alice', profilePicture: 'assets/alice.jpg', upcomingEvents: 2),
-    Friend(name: 'Bob', profilePicture: 'assets/bob.jpg', upcomingEvents: 0),
-    Friend(name: 'Charlie', profilePicture: 'assets/charlie.jpg', upcomingEvents: 1),
+    Friend(name: 'Abdelrahman', profilePicture: 'assets/avatar.jpg', upcomingEvents: 2),
+    Friend(name: 'Mohamed', profilePicture: 'assets/avatar.jpg', upcomingEvents: 0),
+    Friend(name: 'Hamza', profilePicture: 'assets/avatar.jpg', upcomingEvents: 1),
   ];
+  final Map<String, List<Gift>> giftDatabase = {
+    'Abdelrahman': [
+      Gift(name: 'Teddy Bear', category: 'Toys'),
+      Gift(name: 'Necklace', category: 'Jewelry', isPledged: true),
+    ],
+    'Mohamed': [
+      Gift(name: 'Football', category: 'Sports'),
+    ],
+    'Hamza': [
+      Gift(name: 'Watch', category: 'Accessories', isPledged: true),
+      Gift(name: 'Book', category: 'Education'),
+    ],
+  };
 
   String searchQuery = '';
 
@@ -28,7 +41,10 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => GiftListPage(friend: friend),
+        builder: (context) => GiftListPage(
+            friend: friend,
+            gifts: giftDatabase[friend.name] ?? [],
+        ),
       ),
     );
   }
@@ -42,11 +58,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[850],
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('Friends List'),
+        titleTextStyle: TextStyle(
+          color: Colors.amber,
+          fontSize: 28.0,
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: Icon(
+              Icons.add,
+              color: Colors.grey,
+            ),
             onPressed: addNewFriend,
           ),
         ],
@@ -57,9 +82,19 @@ class _HomePageState extends State<HomePage> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search Friends...',
-                prefixIcon: Icon(Icons.search),
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: Colors.amber, width: 2.0),
                 ),
               ),
               onChanged: (query) {
@@ -67,6 +102,9 @@ class _HomePageState extends State<HomePage> {
                   searchQuery = query;
                 });
               },
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -78,11 +116,20 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: AssetImage(friend.profilePicture),
+              radius: 30.0,
             ),
             title: Text(friend.name),
+            titleTextStyle: TextStyle(
+              color: Colors.amber,
+              fontSize: 20.0,
+            ),
             subtitle: Text(friend.upcomingEvents > 0
                 ? 'Upcoming Events: ${friend.upcomingEvents}'
                 : 'No Upcoming Events'),
+            subtitleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+            ),
             trailing: friend.upcomingEvents > 0
                 ? CircleAvatar(
               radius: 12,
@@ -121,19 +168,62 @@ class Friend {
     required this.upcomingEvents,
   });
 }
+class Gift {
+  final String name;
+  final String category;
+  final bool isPledged;
+
+  Gift({
+    required this.name,
+    required this.category,
+    this.isPledged = false,
+  });
+}
 
 // GiftListPage stub (for navigation demo)
 class GiftListPage extends StatelessWidget {
   final Friend friend;
+  final List<Gift> gifts;
 
-  const GiftListPage({Key? key, required this.friend}) : super(key: key);
+  const GiftListPage({Key? key, required this.friend, required this.gifts}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${friend.name}\'s Gift List')),
-      body: Center(
-        child: Text('Gift List Details for ${friend.name}'),
+      backgroundColor: Colors.grey[850],
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(
+          '${friend.name}\'s Gift List',
+          style: TextStyle(color: Colors.amber,fontSize: 28.0,),
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: gifts.length,
+        itemBuilder: (context, index) {
+          final gift = gifts[index];
+          return ListTile(
+            leading: Icon(
+              gift.isPledged ? Icons.check_circle : Icons.card_giftcard,
+              color: gift.isPledged ? Colors.green : Colors.grey,
+            ),
+            title: Text(gift.name,style: TextStyle(color: Colors.white,fontSize: 20.0),),
+            subtitle: Text('Category: ${gift.category}',style: TextStyle(color: Colors.white,fontSize: 16.0,),),
+            trailing: gift.isPledged
+                ? const Text('Pledged', style: TextStyle(color: Colors.green))
+                : ElevatedButton(
+              onPressed: () {
+                // Pledge logic can be implemented here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('You pledged ${gift.name} for ${friend.name}'),
+                  ),
+                );
+              },
+              child: const Text('Pledge'),
+            ),
+          );
+        },
       ),
     );
   }

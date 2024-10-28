@@ -117,15 +117,30 @@ class _GiftListsPageState extends State<GiftListsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[850],
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('Gift Lists'),
+        titleTextStyle: TextStyle(
+          color: Colors.amber,
+          fontSize: 28.0,
+        ),
         actions: [
           DropdownButton<String>(
+
             value: _sortCriteria,
+            dropdownColor: Colors.grey[850],
+            icon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.white, // Dropdown icon color
+            ),
             items: ['Name', 'Category', 'Status']
                 .map((criteria) => DropdownMenuItem(
               value: criteria,
-              child: Text('Sort by $criteria'),
+              child: Text(
+                'Sort by $criteria',
+                style: TextStyle(color: Colors.white,fontSize: 16.0),
+              ),
             ))
                 .toList(),
             onChanged: (value) {
@@ -139,10 +154,16 @@ class _GiftListsPageState extends State<GiftListsPage> {
         itemBuilder: (context, index) {
           final gift = gifts[index];
           return Card(
-            color: gift.isPledged ? Colors.green[100] : Colors.white,
+            color: gift.isPledged ? Colors.greenAccent[400] : Colors.white,
             child: ListTile(
-              title: Text(gift.name),
-              subtitle: Text('${gift.category} - ${gift.status}'),
+              title: Text(
+                gift.name,
+                style: TextStyle(fontSize: 20.0,),
+              ),
+              subtitle: Text(
+                '${gift.category} - ${gift.status}',
+                style: TextStyle(fontSize: 16.0),
+              ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
