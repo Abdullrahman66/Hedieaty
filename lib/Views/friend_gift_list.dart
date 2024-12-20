@@ -50,6 +50,7 @@ class _EventGiftsPageState extends State<EventGiftsPage> {
       price: gift.price,
       status: 'Pledged',
       eventId: widget.event.id,
+      imageURL: gift.imageURL,
       firestoreEventId: widget.event.firestoreID,
       isPublished: gift != null && gift!.isPublished ? false : (gift?.isPublished ?? false),
     );

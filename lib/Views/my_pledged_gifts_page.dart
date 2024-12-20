@@ -88,9 +88,12 @@ class _PledgedGiftsPageState extends State<PledgedGiftsPage> {
           return Card(
             color: Colors.grey[700],
             child: ListTile(
-              leading: gift.imageURL != null ? CircleAvatar(
+              leading: (gift.imageURL != null && gift.imageURL!.isNotEmpty)
+                  ? CircleAvatar(
                 backgroundImage: NetworkImage(gift.imageURL!),
-              ) : null,
+                radius: 30,
+              )
+                  : null,
               title: Text(
                   gift.name,
                 style: TextStyle(fontSize: 20, color: Colors.amber),
