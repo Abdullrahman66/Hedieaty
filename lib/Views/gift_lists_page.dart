@@ -59,8 +59,11 @@ class _GiftListsPageState extends State<GiftListsPage> {
     });
   }
 
-  void deleteGift(int id) async {
-    await _giftController.deleteGift(id);
+  void deleteGift(Gift gift) async {
+    await _giftController.deleteGift(gift.id!);
+    if(gift.firestoreID != null){
+      await Gift.deleteGiftFromFirestore(gift.firestoreID!);
+    }
     await _fetchGifts();
   }
 
@@ -243,7 +246,7 @@ class _GiftListsPageState extends State<GiftListsPage> {
                     icon: Icon(Icons.delete),
                     color: Colors.red,
                     onPressed: gift.status == 'Pledged'
-                        ? null : () => deleteGift(gift.id!),
+                        ? null : () => deleteGift(gift),
                   ),
                   ElevatedButton(
                     onPressed: gift.status == 'Pledged'
